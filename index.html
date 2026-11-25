@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#080d18">
+<title>NOVEXA | Trade Beyond Limits</title>
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  background:#080d18;color:#f4f6fb;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+  padding-bottom:85px
+}
+header{
+  display:flex;justify-content:space-between;
+  align-items:center;padding:20px;
+  border-bottom:1px solid #202a3b
+}
+.logo{font-size:25px;font-weight:900;letter-spacing:2px}
+.logo span{color:#3688ff}
+button{cursor:pointer;font:inherit}
+.header-btn{
+  background:#17243a;border:1px solid #293b56;
+  color:white;padding:10px 13px;border-radius:10px
+}
+main{padding:20px;max-width:900px;margin:auto}
+.greeting{color:#8e9bb0;font-size:14px}
+h1{font-size:27px;margin:8px 0 22px}
+.balance-card{
+  background:linear-gradient(130deg,#174b9c,#102447 70%,#111a2c);
+  border:1px solid #28569a;border-radius:20px;
+  padding:23px;margin-bottom:24px
+}
+.balance-label{color:#c4d8f5;font-size:14px}
+.balance{font-size:34px;font-weight:750;margin:12px 0}
+.balance small{font-size:15px;color:#c5d8f5}
+.demo{font-size:11px;color:#c5d8f5;margin-top:10px}
+.actions{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin:22px 0}
+.action{
+  background:#121d30;border:1px solid #25344b;
+  padding:15px 5px;border-radius:13px;
+  color:white;text-align:center;font-size:12px
+}
+.action b{display:block;font-size:22px;margin-bottom:8px;color:#55a0ff}
+.section-title{
+  display:flex;justify-content:space-between;
+  align-items:center;margin:27px 0 14px
+}
+.section-title h2{font-size:19px}
+.section-title button{background:none;border:0;color:#58a0ff}
+.market{
+  background:#111a2a;border:1px solid #202e43;
+  border-radius:14px;padding:15px;margin-bottom:10px;
+  display:flex;align-items:center;justify-content:space-between
+}
+.coin{display:flex;align-items:center;gap:11px}
+.coin-icon{
+  width:39px;height:39px;border-radius:50%;
+  display:grid;place-items:center;background:#23344e;
+  font-weight:bold
+}
+.coin-name{font-weight:650}
+.coin-symbol{font-size:12px;color:#8e9bb0;margin-top:4px}
+.price{text-align:right;font-weight:650}
+.change{font-size:12px;color:#26cb91;margin-top:5px}
+.negative{color:#ff6575}
+.notice{
+  background:#111a2a;border:1px solid #25344b;
+  padding:17px;border-radius:14px;margin-top:25px;
+  color:#9eabc0;font-size:13px;line-height:1.6
+}
+.page{display:none}
+.page.active{display:block}
+.bottom-nav{
+  position:fixed;bottom:0;left:0;right:0;
+  background:#0d1523;border-top:1px solid #253044;
+  display:flex;justify-content:space-around;
+  padding:12px 3px calc(12px + env(safe-area-inset-bottom));
+  z-index:10
+}
+.nav-item{
+  background:none;border:0;color:#8593aa;
+  font-size:10px;display:flex;flex-direction:column;
+  align-items:center;gap:5px
+}
+.nav-item b{font-size:19px}
+.nav-item.active{color:#54a0ff}
+input{
+  width:100%;padding:14px;background:#111a2a;
+  border:1px solid #293951;border-radius:10px;
+  color:white;margin:12px 0
+}
+.primary{
+  background:#287cff;color:white;border:0;
+  padding:14px;border-radius:10px;width:100%;
+  font-weight:bold;margin-top:10px
+}
+.muted{color:#91a0b7;font-size:13px;line-height:1.6}
+@media(min-width:650px){
+  main{padding:30px}
+  .balance-card{padding:30px}
+}
+</style>
+</head>
+
+<body>
+
+<header>
+  <div class="logo">NOVE<span>XA</span></div>
+  <button class="header-btn" onclick="showPage('account')">Account</button>
+</header>
+
+<main>
+
+<section id="home" class="page active">
+  <p class="greeting">WELCOME TO NOVEXA</p>
+  <h1>Trade beyond limits.</h1>
+
+  <div class="balance-card">
+    <p class="balance-label">Portfolio balance</p>
+    <div class="balance">$12,845.60</div>
+    <p class="balance-label">Illustrative demo balance</p>
+    <p class="demo">DEMO ACCOUNT · NOT REAL MONEY</p>
+  </div>
+
+  <div class="actions">
+    <button class="action" onclick="showPage('trade')"><b>↗</b>Buy</button>
+    <button class="action" onclick="showPage('trade')"><b>↙</b>Sell</button>
+    <button class="action" onclick="showPage('wallet')"><b>⇄</b>Swap</button>
+    <button class="action" onclick="showPage('wallet')"><b>▣</b>Wallet</button>
+  </div>
+
+  <div class="section-title">
+    <h2>Market overview</h2>
+    <button onclick="showPage('markets')">See all →</button>
+  </div>
+
+  <div id="homeMarkets"></div>
+
+  <div class="notice">
+    <strong style="color:white">Welcome to NOVEXA</strong><br>
+    Explore cryptocurrency markets, monitor prices
+    and experience our simulated trading environment.
+    Real deposits and withdrawals are not enabled.
+  </div>
+</section>
+
+<section id="markets" class="page">
+  <h1>Markets</h1>
+  <p class="muted">Cryptocurrency market overview</p>
+  <input id="search" placeholder="Search cryptocurrency..." oninput="renderMarkets()">
+  <div id="allMarkets"></div>
+</section>
+
+<section id="trade" class="page">
+  <h1>Trade</h1>
+  <p class="muted">Simulated trading interface</p>
+  <div class="notice">Demo trading only. No real orders are executed.</div>
+  <div class="section-title"><h2>Trading pair</h2></div>
+  <select id="pair" style="width:100%;padding:14px;background:#111a2a;color:white;border-radius:10px">
+    <option>BTC / USDT</option>
+    <option>ETH / USDT</option>
+    <option>SOL / USDT</option>
+    <option>BNB / USDT</option>
+  </select>
+  <div class="section-title"><h2>Order amount (USDT)</h2></div>
+  <input id="amount" type="number" placeholder="Enter amount">
+  <button class="primary" onclick="tradeDemo('BUY')">Buy</button>
+  <button class="primary" style="background:#d94d63" onclick="tradeDemo('SELL')">Sell</button>
+  <p id="tradeMessage" class="muted" style="margin-top:15px"></p>
+</section>
+
+<section id="wallet" class="page">
+  <h1>My Wallet</h1>
+  <div class="balance-card">
+    <p class="balance-label">Demo wallet balance</p>
+    <div class="balance">$12,845.60</div>
+    <p class="demo">SIMULATED FUNDS ONLY</p>
+  </div>
+  <div class="section-title"><h2>Your assets</h2></div>
+  <div id="walletAssets"></div>
+  <div class="notice">
+    Deposits and withdrawals are currently disabled.
+    Do not send cryptocurrency to this demo website.
+  </div>
+</section>
+
+<section id="account" class="page">
+  <h1>Account</h1>
+  <div class="market">
+    <div><div class="coin-name">NOVEXA User</div>
+    <div class="coin-symbol">Demo profile</div></div>
+    <span>👤</span>
+  </div>
+  <div class="section-title"><h2>Account settings</h2></div>
+  <div class="notice">
+    <p>Personal information</p><br>
+    <p>Security settings</p><br>
+    <p>Identity verification — Coming soon</p><br>
+    <p>Help and support</p><br>
+    <p>Terms and privacy</p>
+  </div>
+</section>
+
+</main>
+
+<nav class="bottom-nav">
+  <button class="nav-item active" onclick="showPage('home',this)"><b>⌂</b>Home</button>
+  <button class="nav-item" onclick="showPage('markets',this)"><b>▥</b>Markets</button>
+  <button class="nav-item" onclick="showPage('trade',this)"><b>⇄</b>Trade</button>
+  <button class="nav-item" onclick="showPage('wallet',this)"><b>▣</b>Wallet</button>
+  <button class="nav-item" onclick="showPage('account',this)"><b>☻</b>Account</button>
+</nav>
+
+<script>
+const coins=[
+ {id:'bitcoin',name:'Bitcoin',symbol:'BTC',icon:'₿'},
+ {id:'ethereum',name:'Ethereum',symbol:'ETH',icon:'Ξ'},
+ {id:'solana',name:'Solana',symbol:'SOL',icon:'◎'},
+ {id:'binancecoin',name:'BNB',symbol:'BNB',icon:'◆'},
+ {id:'tether',name:'Tether',symbol:'USDT',icon:'₮'},
+ {id:'usd-coin',name:'USD Coin',symbol:'USDC',icon:'＄'}
+];
+
+let prices={};
+
+function showPage(id,button){
+ document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
+ document.getElementById(id).classList.add('active');
+ document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+ if(button)button.classList.add('active');
+ else document.querySelectorAll('.nav-item').forEach(b=>{
+  if(b.textContent.toLowerCase().includes(id))b.classList.add('active');
+ });
+ window.scrollTo(0,0);
+}
+
+function money(n){
+ return '$'+Number(n).toLocaleString('en-US',{maximumFractionDigits:4});
+}
+
+function renderMarkets(){
+ const query=(document.getElementById('search')?.value||'').toLowerCase();
+ const html=coins.filter(c=>
+  c.name.toLowerCase().includes(query)||c.symbol.toLowerCase().includes(query)
+ ).map(c=>{
+  const p=prices[c.id];
+  return `<div class="market">
+   <div class="coin">
+    <div class="coin-icon">${c.icon}</div>
+    <div><div class="coin-name">${c.name}</div>
+    <div class="coin-symbol">${c.symbol}</div></div>
+   </div>
+   <div class="price">
+    ${p?money(p.usd):'Loading...'}
+    <div class="change ${p&&p.change<0?'negative':''}">
+    ${p?(p.change>0?'+':'')+p.change.toFixed(2)+'%':'—'}
+    </div>
+   </div>
+  </div>`;
+ }).join('');
+ document.getElementById('allMarkets').innerHTML=html;
+ document.getElementById('homeMarkets').innerHTML=html;
+ document.getElementById('walletAssets').innerHTML=html;
+}
+
+async function loadPrices(){
+ try{
+  const ids=coins.map(c=>c.id).join(',');
+  const response=await fetch(
+   'https://api.coingecko.com/api/v3/simple/price?ids='+ids+'&vs_currencies=usd&include_24hr_change=true'
+  );
+  if(!response.ok)throw new Error('Price service unavailable');
+  const data=await response.json();
+  coins.forEach(c=>{
+   if(data[c.id]){
+    prices[c.id]={
+     usd:data[c.id].usd,
+     change:data[c.id].usd_24h_change||0
+    };
+   }
+  });
+  renderMarkets();
+ }catch(e){
+  document.getElementById('homeMarkets').innerHTML=
+  '<div class="notice">Live prices are temporarily unavailable. Please try again later.</div>';
+ }
+}
+
+function tradeDemo(side){
+ const amount=Number(document.getElementById('amount').value);
+ const pair=document.getElementById('pair').value;
+ const message=document.getElementById('tradeMessage');
+ if(!amount||amount<=0){
+  message.textContent='Please enter a valid amount.';
+  return;
+ }
+ message.textContent=side+' preview for '+money(amount)+' on '+pair+'. This is a simulation only; no order was placed.';
+}
+
+loadPrices();
+renderMarkets();
+setInterval(loadPrices,60000);
+</script>
+
+</body>
+</html>
