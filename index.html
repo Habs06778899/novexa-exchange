@@ -149,8 +149,22 @@ input{
 
 <section id="markets" class="page">
   <h1>Markets</h1>
-  <p class="muted">Cryptocurrency market overview</p>
-  <input id="search" placeholder="Search cryptocurrency..." oninput="renderMarkets()">
+  <p class="muted">Explore live cryptocurrency prices in USD.</p>
+
+  <div class="balance-card" style="padding:16px;margin-top:20px">
+    <p class="balance-label">Market data</p>
+    <h2 style="margin-top:8px">Live crypto market</h2>
+    <p class="demo" id="lastUpdated">Updating prices...</p>
+  </div>
+
+  <input id="search" placeholder="Search Bitcoin, Ethereum..." oninput="renderMarkets()">
+
+  <div class="actions" style="grid-template-columns:repeat(3,1fr)">
+    <button class="action" onclick="filterMarkets('all')">All assets</button>
+    <button class="action" onclick="filterMarkets('gainers')">Gainers</button>
+    <button class="action" onclick="filterMarkets('losers')">Losers</button>
+  </div>
+
   <div id="allMarkets"></div>
 </section>
 
@@ -241,29 +255,69 @@ function money(n){
  return '$'+Number(n).toLocaleString('en-US',{maximumFractionDigits:4});
 }
 
-function renderMarkets(){
- const query=(document.getElementById('search')?.value||'').toLowerCase();
- const html=coins.filter(c=>
-  c.name.toLowerCase().includes(query)||c.symbol.toLowerCase().includes(query)
- ).map(c=>{
-  const p=prices[c.id];
-  return `<div class="market">
-   <div class="coin">
-    <div class="coin-icon">${c.icon}</div>
-    <div><div class="coin-name">${c.name}</div>
-    <div class="coin-symbol">${c.symbol}</div></div>
-   </div>
-   <div class="price">
-    ${p?money(p.usd):'Loading...'}
-    <div class="change ${p&&p.change<0?'negative':''}">
-    ${p?(p.change>0?'+':'')+p.change.toFixed(2)+'%':'—'}
-    </div>
-   </div>
-  </div>`;
- }).join('');
- document.getElementById('allMarkets').innerHTML=html;
- document.getElementById('homeMarkets').innerHTML=html;
- document.getElementById('walletAssets').innerHTML=html;
+let marketFilter = 'all';
+
+function filterMarkets(type) {
+  marketFilter = type;
+  renderMarkets();
+}
+
+function renderMarkets() {
+  const query = (
+    document.getElementById('search')?.value || ''
+  ).toLowerCase();
+
+  const matchingCoins = coins.filter(c =>
+    c.name.toLowerCase().includes(query) ||
+    c.symbol.toLowerCase().includes(query)
+  );
+
+  const sortedCoins = [...matchingCoins];
+
+  if (marketFilter === 'gainers') {
+    sortedCoins.sort((a, b) =>
+      (prices[b.id]?.change || 0) -
+      (prices[a.id]?.change || 0)
+    );
+  }
+
+  if (marketFilter === 'losers') {
+    sortedCoins.sort((a, b) =>
+      (prices[a.id]?.change || 0) -
+      (prices[b.id]?.change || 0)
+    );
+  }
+
+  const createMarketHTML = coinList => coinList.map(c => {
+    const p = prices[c.id];
+
+    return `<div class="market">
+      <div class="coin">
+        <div class="coin-icon">${c.icon}</div>
+        <div>
+          <div class="coin-name">${c.name}</div>
+          <div class="coin-symbol">${c.symbol}</div>
+        </div>
+      </div>
+
+      <div class="price">
+        ${p ? money(p.usd) : 'Loading...'}
+        <div class="change ${p && p.change < 0 ? 'negative' : ''}">
+          ${p ? (p.change > 0 ? '+' : '') +
+          p.change.toFixed(2) + '%' : '—'}
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+
+  document.getElementById('allMarkets').innerHTML =
+    createMarketHTML(sortedCoins);
+
+  document.getElementById('homeMarkets').innerHTML =
+    createMarketHTML(coins);
+
+  document.getElementById('walletAssets').innerHTML =
+    createMarketHTML(coins);
 }
 
 async function loadPrices(){
