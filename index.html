@@ -313,6 +313,19 @@ function renderMarkets() {
     );
   }
 
+  const compactUSD = value => {
+    if (value == null || !Number.isFinite(Number(value))) {
+      return '—';
+    }
+
+    return new Intl.NumberFormat('en-US', {
+      style: 'currency',
+      currency: 'USD',
+      notation: 'compact',
+      maximumFractionDigits: 2
+    }).format(value);
+  };
+
   const createMarketHTML = coinList => coinList.map(c => {
     const p = prices[c.id];
 
@@ -327,8 +340,15 @@ function renderMarkets() {
 
       <div class="price">
         ${p ? money(p.usd) : 'Loading...'}
+
         <div class="change ${p && p.change < 0 ? 'negative' : ''}">
-          ${p ? (p.change > 0 ? '+' : '') + p.change.toFixed(2) + '%' : '—'}
+          ${p ? (p.change > 0 ? '+' : '') +
+          p.change.toFixed(2) + '%' : '—'}
+        </div>
+
+        <div style="font-size:10px;color:#9299a8;margin-top:5px;line-height:1.8;">
+          Market Cap: ${p ? compactUSD(p.marketCap) : '—'}<br>
+          24H Volume: ${p ? compactUSD(p.volume) : '—'}
         </div>
       </div>
     </div>`;
