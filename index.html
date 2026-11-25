@@ -402,6 +402,13 @@ loadPrices();
 renderMarkets();
 setInterval(loadPrices,60000);
 </script>
+<div id="test-status" style="background:#111;color:white;padding:12px;text-align:center;">
+  Checking JavaScript...
+</div>
 
+<script>
+document.getElementById("test-status").textContent =
+  "NOVEXA JavaScript is working!";
+</script>
 </body>
 </html>
