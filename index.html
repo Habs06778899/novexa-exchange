@@ -429,6 +429,29 @@ input{
   transform: rotate(-12deg);
   opacity: 0.5;
 }
+  .tradingview-chart {
+  width: 100%;
+  height: 380px;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #111d31;
+  margin-top: 15px;
+}
+
+.tradingview-chart iframe {
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+.chart-timeframes button {
+  cursor: pointer;
+}
+
+.chart-timeframes button.active {
+  background: #174b9c;
+  color: white;
+}
 </style>
 </head>
 
@@ -562,11 +585,25 @@ input{
 <div class="chart-card">
   <div class="chart-heading">
     <div>
-      <p class="balance-label">Market chart</p>
+      <p class="balance-label">Live market chart</p>
       <h3 id="chartPairTitle">BTC / USDT</h3>
     </div>
-    <span class="live-indicator">● MARKET</span>
+    <span class="live-indicator">● LIVE CHART</span>
   </div>
+
+  <div class="chart-timeframes">
+    <button class="active" onclick="setChartInterval('60',this)">1H</button>
+    <button onclick="setChartInterval('240',this)">4H</button>
+    <button onclick="setChartInterval('D',this)">1D</button>
+    <button onclick="setChartInterval('W',this)">1W</button>
+  </div>
+
+  <div id="tradingViewChart" class="tradingview-chart">
+    <p class="muted">Loading live chart...</p>
+  </div>
+
+  <p class="demo">Chart data provided by TradingView.</p>
+</div>
 
   <div class="chart-timeframes">
     <button class="active" type="button">1H</button>
