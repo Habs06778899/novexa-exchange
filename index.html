@@ -882,7 +882,30 @@ function money(n) {
   });
 }
 
+function updateTradePair() {
+  const pair = document.getElementById('pair').value;
+  const symbol = pair.split('/')[0].trim().toUpperCase();
 
+  const coin = coins.find(
+    c => c.symbol.toUpperCase() === symbol
+  );
+
+  const title = document.getElementById('tradePairTitle');
+  const chartTitle = document.getElementById('chartPairTitle');
+  const priceDisplay = document.getElementById('tradeCurrentPrice');
+
+  if (title) title.textContent = pair;
+  if (chartTitle) chartTitle.textContent = pair;
+
+  if (!coin || !prices[coin.id]) {
+    if (priceDisplay) priceDisplay.textContent = 'Price unavailable';
+    return;
+  }
+
+  if (priceDisplay) {
+    priceDisplay.textContent = money(prices[coin.id].usd);
+  }
+}
 function renderMarkets() {
   const query = (
     document.getElementById('search')?.value || ''
