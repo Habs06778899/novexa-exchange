@@ -1007,22 +1007,31 @@ async function loadPrices() {
     }
 
     renderMarkets();
-updateTradePair();
-  } catch (error) {
-    console.error('NOVEXA market error:', error);
+function updateTradePair() {
+  const pair = document.getElementById('pair').value;
+  const symbol = pair.split('/')[0].trim().toUpperCase();
 
-    const message =
-      'Market prices temporarily unavailable. Please refresh shortly.';
+  const coin = coins.find(
+    c => c.symbol.toUpperCase() === symbol
+  );
 
-    const home = document.getElementById('homeMarkets');
-    const market = document.getElementById('allMarkets');
+  const title = document.getElementById('tradePairTitle');
+  const chartTitle = document.getElementById('chartPairTitle');
+  const priceDisplay = document.getElementById('tradeCurrentPrice');
 
-    if (home) home.innerHTML = message;
-    if (market) market.innerHTML = message;
+  if (title) title.textContent = pair;
+  if (chartTitle) chartTitle.textContent = pair;
 
-    const updated = document.getElementById('lastUpdated');
-    if (updated) updated.textContent = 'Unable to update prices';
+  if (!coin || !prices[coin.id]) {
+    if (priceDisplay) priceDisplay.textContent = 'Price unavailable';
+    return;
   }
+
+  if (priceDisplay) {
+    priceDisplay.textContent = money(prices[coin.id].usd);
+  }
+
+  loadTradeChart(coin.id);
 }
 
 function tradeDemo(side) {
