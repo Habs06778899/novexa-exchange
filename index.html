@@ -913,7 +913,9 @@ function showPage(id, button) {
       }
     });
   }
-
+if (id === 'trade') {
+  setTimeout(renderTradingViewChart, 300);
+}
   window.scrollTo(0, 0);
 }
 
@@ -940,7 +942,7 @@ function updateTradePair() {
 
   if (title) title.textContent = selectedPair;
   if (chartTitle) chartTitle.textContent = selectedPair;
-
+renderTradingViewChart();
   if (!coin || !prices[coin.id]) {
     if (priceDisplay) priceDisplay.textContent = 'Price unavailable';
     return;
@@ -1078,7 +1080,71 @@ async function loadPrices() {
 
     renderMarkets();
     updateTradePair();
+let chartInterval = '60';
 
+function renderTradingViewChart() {
+  const container = document.getElementById('tradingViewChart');
+  const pair = document.getElementById('pair');
+
+  if (!container || !pair) return;
+
+  const symbol = pair.value.split('/')[0].trim();
+
+  const tradingSymbols = {
+    BTC: 'BINANCE:BTCUSDT',
+    ETH: 'BINANCE:ETHUSDT',
+    SOL: 'BINANCE:SOLUSDT',
+    BNB: 'BINANCE:BNBUSDT'
+  };
+
+  const selectedSymbol = tradingSymbols[symbol];
+
+  if (!selectedSymbol) return;
+
+  container.innerHTML = '';
+
+  const widget = document.createElement('script');
+
+  widget.type = 'text/javascript';
+  widget.async = true;
+
+  widget.src =
+    'https://s3.tradingview.com/external-embedding/embed-widget-advanced-chart.js';
+
+  widget.innerHTML = JSON.stringify({
+    autosize: true,
+    symbol: selectedSymbol,
+    interval: chartInterval,
+    timezone: 'Etc/UTC',
+    theme: 'dark',
+    style: '1',
+    locale: 'en',
+    allow_symbol_change: false,
+    calendar: false,
+    hide_side_toolbar: true,
+    hide_top_toolbar: false,
+    hide_legend: false,
+    hide_volume: false,
+    save_image: false,
+    backgroundColor: '#111d31',
+    gridColor: 'rgba(255,255,255,0.05)',
+    withdateranges: true,
+    support_host: 'https://www.tradingview.com'
+  });
+
+  container.appendChild(widget);
+}
+
+function setChartInterval(interval, button) {
+  chartInterval = interval;
+
+  document.querySelectorAll('.chart-timeframes button')
+    .forEach(btn => btn.classList.remove('active'));
+
+  button.classList.add('active');
+
+  renderTradingViewChart();
+}
   } catch (error) {
     console.error('NOVEXA market error:', error);
 
