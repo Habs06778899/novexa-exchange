@@ -324,15 +324,14 @@ function renderMarkets() {
     </div>`;
   }).join('');
 
-  document.getElementById('allMarkets').innerHTML =
-    createMarketHTML(sortedCoins);
+  const allMarkets = document.getElementById('allMarkets');
+if (allMarkets) allMarkets.innerHTML = createMarketHTML(sortedCoins);
 
-  document.getElementById('homeMarkets').innerHTML =
-    createMarketHTML(coins);
+const homeMarkets = document.getElementById('homeMarkets');
+if (homeMarkets) homeMarkets.innerHTML = createMarketHTML(coins);
 
-  document.getElementById('walletAssets').innerHTML =
-    createMarketHTML(coins);
-}
+const walletAssets = document.getElementById('walletAssets');
+if (walletAssets) walletAssets.innerHTML = createMarketHTML(coins);
 
 async function loadPrices(){
 try{
