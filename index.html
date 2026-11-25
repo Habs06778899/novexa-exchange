@@ -418,21 +418,85 @@ input{
 </section>
 
 <section id="trade" class="page">
-  <h1>Trade</h1>
-  <p class="muted">Simulated trading interface</p>
-  <div class="notice">Demo trading only. No real orders are executed.</div>
-  <div class="section-title"><h2>Trading pair</h2></div>
-  <select id="pair" style="width:100%;padding:14px;background:#111a2a;color:white;border-radius:10px">
+
+  <p class="greeting">NOVEXA EXCHANGE</p>
+  <h1>Spot Trading</h1>
+  <p class="muted">Professional simulated trading interface</p>
+
+  <div class="notice">
+    <strong>DEMO TRADING</strong>
+    <p>No real orders are executed. All trades are simulations.</p>
+  </div>
+
+  <div class="trade-pair-card">
+    <div>
+      <p class="balance-label">Selected trading pair</p>
+      <h2 id="tradePairTitle">BTC / USDT</h2>
+    </div>
+    <span class="live-indicator">● MARKET DATA</span>
+  </div>
+
+  <div class="section-title">
+    <h2>Trading pair</h2>
+  </div>
+
+  <select id="pair" onchange="updateTradePair()" style="width:100%;padding:15px;background:#111a2a;color:white;border:1px solid #263b5b;border-radius:12px">
     <option>BTC / USDT</option>
     <option>ETH / USDT</option>
     <option>SOL / USDT</option>
     <option>BNB / USDT</option>
   </select>
-  <div class="section-title"><h2>Order amount (USDT)</h2></div>
-  <input id="amount" type="number" placeholder="Enter amount">
-  <button class="primary" onclick="tradeDemo('BUY')">Buy</button>
-  <button class="primary" style="background:#d94d63" onclick="tradeDemo('SELL')">Sell</button>
+
+  <div class="trade-price-card">
+    <p class="balance-label">Current market price</p>
+    <h2 id="tradeCurrentPrice">Loading...</h2>
+    <p class="demo">External market data · USD</p>
+  </div>
+
+  <div class="section-title">
+    <h2>Order type</h2>
+  </div>
+
+  <div class="order-type">
+    <button type="button" class="order-tab active">Market</button>
+    <button type="button" class="order-tab" disabled>Limit (Coming soon)</button>
+  </div>
+
+  <div class="section-title">
+    <h2>Order amount (USDT)</h2>
+  </div>
+
+  <input
+    id="amount"
+    type="number"
+    min="0"
+    step="any"
+    placeholder="Enter amount in USDT"
+  >
+
+  <div class="trade-buttons">
+    <button class="primary buy-button" onclick="tradeDemo('BUY')">
+      Buy
+    </button>
+
+    <button class="primary sell-button" onclick="tradeDemo('SELL')">
+      Sell
+    </button>
+  </div>
+
+  <div class="trade-estimate">
+    <p class="balance-label">Order information</p>
+    <p>Order execution: <strong>Simulation only</strong></p>
+    <p>Trading fees: <strong>Not calculated</strong></p>
+  </div>
+
   <p id="tradeMessage" class="muted" style="margin-top:15px"></p>
+
+  <div class="notice">
+    <strong>Trading risk notice</strong>
+    <p>This interface is a prototype. No real cryptocurrency is bought or sold, and no funds are transferred.</p>
+  </div>
+
 </section>
 
 <section id="wallet" class="page">
