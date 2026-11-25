@@ -435,9 +435,9 @@ function tradeDemo(side) {
     return;
   }
 
-  const symbol = pair.split('/')[0].toUpperCase();
+  const symbol = pair.split('/')[0].trim().toUpperCase();
 
-  const coin = coins.find(c => c.symbol === symbol);
+  const coin = coins.find(c => c.symbol.toUpperCase() === symbol);
   const priceData = coin ? prices[coin.id] : null;
 
   if (!priceData || !priceData.usd) {
