@@ -435,9 +435,39 @@ function tradeDemo(side) {
     return;
   }
 
-  message.textContent = side + ' preview for ' + money(amount) +
-    ' on ' + pair +
-    '. This is a simulation only; no order was placed.';
+  const symbol = pair.split('/')[0].toUpperCase();
+
+  const coin = coins.find(c => c.symbol === symbol);
+  const priceData = coin ? prices[coin.id] : null;
+
+  if (!priceData || !priceData.usd) {
+    message.textContent = 'Live price unavailable. Please try again.';
+    return;
+  }
+
+  const price = priceData.usd;
+  const quantity = amount / price;
+
+  const confirmation = confirm(
+    'NOVEXA ORDER PREVIEW\n\n' +
+    'Order: ' + side.toUpperCase() + '\n' +
+    'Pair: ' + pair + '\n' +
+    'Amount: ' + money(amount) + '\n' +
+    'Estimated quantity: ' + quantity.toFixed(8) + ' ' + symbol + '\n' +
+    'Price: ' + money(price) + '\n\n' +
+    'This is a simulation only. No real order will be placed.\n\n' +
+    'Continue?'
+  );
+
+  if (confirmation) {
+    message.textContent =
+      side.toUpperCase() + ' order preview confirmed! ' +
+      quantity.toFixed(8) + ' ' + symbol +
+      ' for approximately ' + money(amount) +
+      '. Demo only — no real trade executed.';
+  } else {
+    message.textContent = 'Order preview cancelled.';
+  }
 }
 
 renderMarkets();
