@@ -229,47 +229,58 @@ input{
 </nav>
 
 <script>
-const coins=[
-{id:‘bitcoin’,name:‘Bitcoin’,symbol:‘BTC’,icon:‘₿’},
-{id:‘ethereum’,name:‘Ethereum’,symbol:‘ETH’,icon:‘Ξ’},
-{id:‘solana’,name:‘Solana’,symbol:‘SOL’,icon:‘◎’},
-{id:‘binancecoin’,name:‘BNB’,symbol:‘BNB’,icon:‘◆’},
-{id:‘tether’,name:‘Tether’,symbol:‘USDT’,icon:‘₮’},
-{id:‘usd-coin’,name:‘USD Coin’,symbol:‘USDC’,icon:‘＄’},
-{id:‘ripple’,name:‘XRP’,symbol:‘XRP’,icon:‘✕’},
-{id:‘dogecoin’,name:‘Dogecoin’,symbol:‘DOGE’,icon:‘Ð’},
-{id:‘cardano’,name:‘Cardano’,symbol:‘ADA’,icon:‘₳’},
-{id:‘tron’,name:‘TRON’,symbol:‘TRX’,icon:‘T’},
-{id:‘avalanche-2’,name:‘Avalanche’,symbol:‘AVAX’,icon:‘🔺’},
-{id:‘chainlink’,name:‘Chainlink’,symbol:‘LINK’,icon:‘🔗’},
-{id:‘polkadot’,name:‘Polkadot’,symbol:‘DOT’,icon:‘●’},
-{id:‘litecoin’,name:‘Litecoin’,symbol:‘LTC’,icon:‘Ł’},
-{id:‘shiba-inu’,name:‘Shiba Inu’,symbol:‘SHIB’,icon:‘🐕’},
-{id:‘bitcoin-cash’,name:‘Bitcoin Cash’,symbol:‘BCH’,icon:‘₿’},
-{id:‘stellar’,name:‘Stellar’,symbol:‘XLM’,icon:‘✦’},
-{id:‘near’,name:‘NEAR Protocol’,symbol:‘NEAR’,icon:‘Ⓝ’},
-{id:‘uniswap’,name:‘Uniswap’,symbol:‘UNI’,icon:‘🦄’},
-{id:‘sui’,name:‘Sui’,symbol:‘SUI’,icon:‘💧’}
+const coins = [
+{id:'bitcoin',name:'Bitcoin',symbol:'BTC',icon:'₿'},
+{id:'ethereum',name:'Ethereum',symbol:'ETH',icon:'Ξ'},
+{id:'solana',name:'Solana',symbol:'SOL',icon:'◎'},
+{id:'binancecoin',name:'BNB',symbol:'BNB',icon:'◆'},
+{id:'tether',name:'Tether',symbol:'USDT',icon:'₮'},
+{id:'usd-coin',name:'USD Coin',symbol:'USDC',icon:'＄'},
+{id:'ripple',name:'XRP',symbol:'XRP',icon:'✕'},
+{id:'dogecoin',name:'Dogecoin',symbol:'DOGE',icon:'Ð'},
+{id:'cardano',name:'Cardano',symbol:'ADA',icon:'₳'},
+{id:'tron',name:'TRON',symbol:'TRX',icon:'T'},
+{id:'avalanche-2',name:'Avalanche',symbol:'AVAX',icon:'🔺'},
+{id:'chainlink',name:'Chainlink',symbol:'LINK',icon:'🔗'},
+{id:'polkadot',name:'Polkadot',symbol:'DOT',icon:'●'},
+{id:'litecoin',name:'Litecoin',symbol:'LTC',icon:'Ł'},
+{id:'shiba-inu',name:'Shiba Inu',symbol:'SHIB',icon:'🐕'},
+{id:'bitcoin-cash',name:'Bitcoin Cash',symbol:'BCH',icon:'₿'},
+{id:'stellar',name:'Stellar',symbol:'XLM',icon:'✦'},
+{id:'near',name:'NEAR Protocol',symbol:'NEAR',icon:'Ⓝ'},
+{id:'uniswap',name:'Uniswap',symbol:'UNI',icon:'🦄'},
+{id:'sui',name:'Sui',symbol:'SUI',icon:'💧'}
 ];
 
-let prices={};
-
-function showPage(id,button){
- document.querySelectorAll('.page').forEach(p=>p.classList.remove('active'));
- document.getElementById(id).classList.add('active');
- document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
- if(button)button.classList.add('active');
- else document.querySelectorAll('.nav-item').forEach(b=>{
-  if(b.textContent.toLowerCase().includes(id))b.classList.add('active');
- });
- window.scrollTo(0,0);
-}
-
-function money(n){
- return '$'+Number(n).toLocaleString('en-US',{maximumFractionDigits:4});
-}
-
+let prices = {};
 let marketFilter = 'all';
+
+function showPage(id, button) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+
+  const page = document.getElementById(id);
+  if (page) page.classList.add('active');
+
+  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+
+  if (button) {
+    button.classList.add('active');
+  } else {
+    document.querySelectorAll('.nav-item').forEach(b => {
+      if (b.textContent.toLowerCase().includes(id)) {
+        b.classList.add('active');
+      }
+    });
+  }
+
+  window.scrollTo(0, 0);
+}
+
+function money(n) {
+  return '$' + Number(n).toLocaleString('en-US', {
+    maximumFractionDigits: 4
+  });
+}
 
 function filterMarkets(type) {
   marketFilter = type;
@@ -317,90 +328,101 @@ function renderMarkets() {
       <div class="price">
         ${p ? money(p.usd) : 'Loading...'}
         <div class="change ${p && p.change < 0 ? 'negative' : ''}">
-          ${p ? (p.change > 0 ? '+' : '') +
-          p.change.toFixed(2) + '%' : '—'}
+          ${p ? (p.change > 0 ? '+' : '') + p.change.toFixed(2) + '%' : '—'}
         </div>
       </div>
     </div>`;
   }).join('');
 
   const allMarkets = document.getElementById('allMarkets');
-if (allMarkets) allMarkets.innerHTML = createMarketHTML(sortedCoins);
+  if (allMarkets) {
+    allMarkets.innerHTML = createMarketHTML(sortedCoins);
+  }
 
-const homeMarkets = document.getElementById('homeMarkets');
-if (homeMarkets) homeMarkets.innerHTML = createMarketHTML(coins);
+  const homeMarkets = document.getElementById('homeMarkets');
+  if (homeMarkets) {
+    homeMarkets.innerHTML = createMarketHTML(coins);
+  }
 
-const walletAssets = document.getElementById('walletAssets');
-if (walletAssets) walletAssets.innerHTML = createMarketHTML(coins);
-
-async function loadPrices(){
-try{
-const ids = coins.map(c => c.id).join(’,’);
-
-const url = ‘https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=’ +
-ids +
-‘&price_change_percentage=24h’;
-
-const response = await fetch(url);
-
-if(!response.ok){
-throw new Error(’CoinGecko error: ’ + response.status);
+  const walletAssets = document.getElementById('walletAssets');
+  if (walletAssets) {
+    walletAssets.innerHTML = createMarketHTML(coins);
+  }
 }
 
-const data = await response.json();
+async function loadPrices() {
+  try {
+    const ids = coins.map(c => c.id).join(',');
 
-if(!Array.isArray(data) || data.length === 0){
-throw new Error(‘No market data returned’);
+    const url = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=' +
+      encodeURIComponent(ids) +
+      '&price_change_percentage=24h';
+
+    const response = await fetch(url);
+
+    if (!response.ok) {
+      throw new Error('CoinGecko error: ' + response.status);
+    }
+
+    const data = await response.json();
+
+    if (!Array.isArray(data) || data.length === 0) {
+      throw new Error('No market data returned');
+    }
+
+    data.forEach(coin => {
+      prices[coin.id] = {
+        usd: coin.current_price,
+        change: coin.price_change_percentage_24h || 0,
+        marketCap: coin.market_cap || 0,
+        volume: coin.total_volume || 0
+      };
+    });
+
+    const updated = document.getElementById('lastUpdated');
+
+    if (updated) {
+      updated.textContent =
+        'Last updated: ' + new Date().toLocaleTimeString();
+    }
+
+    renderMarkets();
+
+  } catch (error) {
+    console.error('NOVEXA market error:', error);
+
+    const message =
+      'Market prices temporarily unavailable. Please refresh shortly.';
+
+    const home = document.getElementById('homeMarkets');
+    const market = document.getElementById('allMarkets');
+
+    if (home) home.innerHTML = message;
+    if (market) market.innerHTML = message;
+
+    const updated = document.getElementById('lastUpdated');
+    if (updated) updated.textContent = 'Unable to update prices';
+  }
 }
 
-data.forEach(coin => {
-prices[coin.id] = {
-usd: coin.current_price,
-change: coin.price_change_percentage_24h || 0,
-marketCap: coin.market_cap || 0,
-volume: coin.total_volume || 0
-};
-});
+function tradeDemo(side) {
+  const amount = Number(document.getElementById('amount').value);
+  const pair = document.getElementById('pair').value;
+  const message = document.getElementById('tradeMessage');
 
-const updated = document.getElementById(‘lastUpdated’);
+  if (!amount || amount <= 0) {
+    message.textContent = 'Please enter a valid amount.';
+    return;
+  }
 
-if(updated){
-updated.textContent =
-’Last updated: ’ + new Date().toLocaleTimeString();
+  message.textContent = side + ' preview for ' + money(amount) +
+    ' on ' + pair +
+    '. This is a simulation only; no order was placed.';
 }
 
 renderMarkets();
-
-}catch(error){
-console.error(‘NOVEXA market error:’, error);
-
-const message =
-‘Market prices temporarily unavailable. Please refresh shortly.’;
-
-const home = document.getElementById(‘homeMarkets’);
-const market = document.getElementById(‘allMarkets’);
-
-if(home) home.innerHTML = message;
-if(market) market.innerHTML = message;
-
-const updated = document.getElementById(‘lastUpdated’);
-if(updated) updated.textContent = ‘Unable to update prices’;
-}
-}
-function tradeDemo(side){
- const amount=Number(document.getElementById('amount').value);
- const pair=document.getElementById('pair').value;
- const message=document.getElementById('tradeMessage');
- if(!amount||amount<=0){
-  message.textContent='Please enter a valid amount.';
-  return;
- }
- message.textContent=side+' preview for '+money(amount)+' on '+pair+'. This is a simulation only; no order was placed.';
-}
-
 loadPrices();
-renderMarkets();
-setInterval(loadPrices,60000);
+setInterval(loadPrices, 60000);
 </script>
 <div id="test-status" style="background:#111;color:white;padding:12px;text-align:center;">
   Checking JavaScript...
