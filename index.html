@@ -305,6 +305,58 @@ input{
   margin-top: 22px;
   line-height: 1.7;
 }
+  .order-book {
+  background: #111d31;
+  border: 1px solid #263b5b;
+  border-radius: 15px;
+  padding: 15px;
+  margin-bottom: 22px;
+  overflow: hidden;
+}
+
+.order-book-header,
+.order-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 8px;
+  padding: 11px 4px;
+  font-size: 11px;
+  text-align: right;
+}
+
+.order-book-header {
+  color: #91a4c2;
+  border-bottom: 1px solid #263b5b;
+}
+
+.order-book-header span:first-child,
+.order-row span:first-child {
+  text-align: left;
+}
+
+.order-row {
+  color: #dce6f5;
+  border-bottom: 1px solid #1d2b40;
+}
+
+.sell-order span:first-child {
+  color: #f06478;
+}
+
+.buy-order span:first-child {
+  color: #39c991;
+}
+
+.order-book-spread {
+  text-align: center;
+  padding: 13px 5px;
+  margin: 8px 0;
+  background: #192b43;
+  border-radius: 8px;
+  color: #91a4c2;
+  font-size: 11px;
+  font-weight: bold;
+}
 </style>
 </head>
 
