@@ -243,21 +243,31 @@ input{
 <main>
 
 <section id="home" class="page active">
+
   <p class="greeting">WELCOME TO NOVEXA</p>
   <h1>Trade beyond limits.</h1>
+  <p class="demo">Your gateway to the crypto market.</p>
 
   <div class="balance-card">
-    <p class="balance-label">Portfolio balance</p>
+    <p class="balance-label">Total portfolio balance</p>
     <div class="balance">$12,845.60</div>
     <p class="balance-label">Illustrative demo balance</p>
     <p class="demo">DEMO ACCOUNT · NOT REAL MONEY</p>
   </div>
 
   <div class="actions">
-    <button class="action" onclick="showPage('trade')"><b>↗</b>Buy</button>
-    <button class="action" onclick="showPage('trade')"><b>↙</b>Sell</button>
-    <button class="action" onclick="showPage('wallet')"><b>⇄</b>Swap</button>
-    <button class="action" onclick="showPage('wallet')"><b>▣</b>Wallet</button>
+    <button class="action" onclick="showPage('trade')">
+      <b>↗</b>Buy
+    </button>
+    <button class="action" onclick="showPage('trade')">
+      <b>↙</b>Sell
+    </button>
+    <button class="action" onclick="showPage('wallet')">
+      <b>⇄</b>Swap
+    </button>
+    <button class="action" onclick="showPage('wallet')">
+      <b>▣</b>Wallet
+    </button>
   </div>
 
   <div class="section-title">
@@ -265,16 +275,52 @@ input{
     <button onclick="showPage('markets')">See all →</button>
   </div>
 
+  <div class="market-highlight">
+    <div>
+      <span class="highlight-label">Market status</span>
+      <h3>Live crypto prices</h3>
+    </div>
+    <span class="live-indicator">● LIVE DATA</span>
+  </div>
+
   <div id="homeMarkets"></div>
 
-  <div class="notice">
-    <strong style="color:white">Welcome to NOVEXA</strong><br>
-    Explore cryptocurrency markets, monitor prices
-    and experience our simulated trading environment.
-    Real deposits and withdrawals are not enabled.
+  <div class="section-title">
+    <h2>Explore NOVEXA</h2>
   </div>
-</section>
 
+  <div class="explore-grid">
+    <div class="explore-card" onclick="showPage('markets')">
+      <span>📊</span>
+      <h3>Markets</h3>
+      <p>Explore cryptocurrency prices.</p>
+    </div>
+
+    <div class="explore-card" onclick="showPage('trade')">
+      <span>⚡</span>
+      <h3>Trading</h3>
+      <p>Experience simulated trading.</p>
+    </div>
+
+    <div class="explore-card" onclick="showPage('wallet')">
+      <span>💳</span>
+      <h3>My Wallet</h3>
+      <p>View your demo assets.</p>
+    </div>
+
+    <div class="explore-card" onclick="showPage('account')">
+      <span>👤</span>
+      <h3>Account</h3>
+      <p>Manage your demo profile.</p>
+    </div>
+  </div>
+
+  <div class="notice">
+    <strong style="color:white">Welcome to NOVEXA</strong>
+    <p>Monitor cryptocurrency markets and explore our simulated trading environment. Prices are provided by an external market-data service. No real transactions or deposits are supported.</p>
+  </div>
+
+</section>
 <section id="markets" class="page">
   <h1>Markets</h1>
   <p class="muted">Explore live cryptocurrency prices in USD.</p>
