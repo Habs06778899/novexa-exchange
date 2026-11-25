@@ -188,16 +188,39 @@ input{
 
 <section id="wallet" class="page">
   <h1>My Wallet</h1>
+  <p class="demo">Manage your NOVEXA demo assets</p>
+
   <div class="balance-card">
-    <p class="balance-label">Demo wallet balance</p>
+    <p class="balance-label">Total estimated balance</p>
     <div class="balance">$12,845.60</div>
     <p class="demo">SIMULATED FUNDS ONLY</p>
   </div>
-  <div class="section-title"><h2>Your assets</h2></div>
+
+  <div class="wallet-actions">
+    <button type="button" disabled>＋ Deposit</button>
+    <button type="button" disabled>－ Withdraw</button>
+  </div>
+
+  <div class="wallet-summary">
+    <div>
+      <p class="balance-label">Available balance</p>
+      <h3>$12,845.60</h3>
+    </div>
+    <div>
+      <p class="balance-label">Assets held</p>
+      <h3>Demo portfolio</h3>
+    </div>
+  </div>
+
+  <div class="section-title">
+    <h2>Your assets</h2>
+  </div>
+
   <div id="walletAssets"></div>
+
   <div class="notice">
-    Deposits and withdrawals are currently disabled.
-    Do not send cryptocurrency to this demo website.
+    <strong>Demo wallet notice</strong>
+    <p>Deposits and withdrawals are currently disabled. Do not send cryptocurrency to this demo website.</p>
   </div>
 </section>
 
