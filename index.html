@@ -856,12 +856,16 @@ let prices = {};
 let marketFilter = 'all';
 
 function showPage(id, button) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.page').forEach(p => {
+    p.classList.remove('active');
+  });
 
   const page = document.getElementById(id);
   if (page) page.classList.add('active');
 
-  document.querySelectorAll('.nav-item').forEach(b => b.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(b => {
+    b.classList.remove('active');
+  });
 
   if (button) {
     button.classList.add('active');
@@ -881,21 +885,24 @@ function money(n) {
     maximumFractionDigits: 4
   });
 }
-  
-function updateTradePair() {
-  const pair = document.getElementById('pair').value;
-  const symbol = pair.split('/')[0].trim().toUpperCase();
 
-  const coin = coins.find(
-    c => c.symbol.toUpperCase() === symbol
+function updateTradePair() {
+  const pair = document.getElementById('pair');
+  if (!pair) return;
+
+  const selectedPair = pair.value;
+  const symbol = selectedPair.split('/')[0].trim().toUpperCase();
+
+  const coin = coins.find(c =>
+    c.symbol.toUpperCase() === symbol
   );
 
   const title = document.getElementById('tradePairTitle');
   const chartTitle = document.getElementById('chartPairTitle');
   const priceDisplay = document.getElementById('tradeCurrentPrice');
 
-  if (title) title.textContent = pair;
-  if (chartTitle) chartTitle.textContent = pair;
+  if (title) title.textContent = selectedPair;
+  if (chartTitle) chartTitle.textContent = selectedPair;
 
   if (!coin || !prices[coin.id]) {
     if (priceDisplay) priceDisplay.textContent = 'Price unavailable';
@@ -906,6 +913,12 @@ function updateTradePair() {
     priceDisplay.textContent = money(prices[coin.id].usd);
   }
 }
+
+function filterMarkets(filter) {
+  marketFilter = filter;
+  renderMarkets();
+}
+
 function renderMarkets() {
   const query = (
     document.getElementById('search')?.value || ''
@@ -980,12 +993,12 @@ function renderMarkets() {
 
   const homeMarkets = document.getElementById('homeMarkets');
   if (homeMarkets) {
-    homeMarkets.innerHTML = createMarketHTML(coins);
+    homeMarkets.innerHTML = createMarketHTML(coins.slice(0, 8));
   }
 
   const walletAssets = document.getElementById('walletAssets');
   if (walletAssets) {
-    walletAssets.innerHTML = createMarketHTML(coins);
+    walletAssets.innerHTML = createMarketHTML(coins.slice(0, 8));
   }
 }
 
@@ -993,7 +1006,8 @@ async function loadPrices() {
   try {
     const ids = coins.map(c => c.id).join(',');
 
-    const url = 'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=' +
+    const url =
+      'https://api.coingecko.com/api/v3/coins/markets?vs_currency=usd&ids=' +
       encodeURIComponent(ids) +
       '&price_change_percentage=24h';
 
@@ -1026,31 +1040,23 @@ async function loadPrices() {
     }
 
     renderMarkets();
-function updateTradePair() {
-  const pair = document.getElementById('pair').value;
-  const symbol = pair.split('/')[0].trim().toUpperCase();
+    updateTradePair();
 
-  const coin = coins.find(
-    c => c.symbol.toUpperCase() === symbol
-  );
+  } catch (error) {
+    console.error('NOVEXA market error:', error);
 
-  const title = document.getElementById('tradePairTitle');
-  const chartTitle = document.getElementById('chartPairTitle');
-  const priceDisplay = document.getElementById('tradeCurrentPrice');
+    const message =
+      'Market prices temporarily unavailable. Please refresh shortly.';
 
-  if (title) title.textContent = pair;
-  if (chartTitle) chartTitle.textContent = pair;
+    const home = document.getElementById('homeMarkets');
+    const market = document.getElementById('allMarkets');
 
-  if (!coin || !prices[coin.id]) {
-    if (priceDisplay) priceDisplay.textContent = 'Price unavailable';
-    return;
+    if (home) home.textContent = message;
+    if (market) market.textContent = message;
+
+    const updated = document.getElementById('lastUpdated');
+    if (updated) updated.textContent = 'Unable to update prices';
   }
-
-  if (priceDisplay) {
-    priceDisplay.textContent = money(prices[coin.id].usd);
-  }
-
-  loadTradeChart(coin.id);
 }
 
 function tradeDemo(side) {
@@ -1064,7 +1070,6 @@ function tradeDemo(side) {
   }
 
   const symbol = pair.split('/')[0].trim().toUpperCase();
-
   const coin = coins.find(c => c.symbol.toUpperCase() === symbol);
   const priceData = coin ? prices[coin.id] : null;
 
@@ -1097,35 +1102,11 @@ function tradeDemo(side) {
     message.textContent = 'Order preview cancelled.';
   }
 }
-function updateTradePair() {
-  const pair = document.getElementById('pair').value;
-  const symbol = pair.split('/')[0].trim().toUpperCase();
 
-  const coin = coins.find(
-    c => c.symbol.toUpperCase() === symbol
-  );
-
-  const title = document.getElementById('tradePairTitle');
-  const priceDisplay = document.getElementById('tradeCurrentPrice');
-
-  if (title) {
-    title.textContent = pair;
-  }
-
-  if (!coin || !prices[coin.id]) {
-    if (priceDisplay) {
-      priceDisplay.textContent = 'Price unavailable';
-    }
-    return;
-  }
-
-  if (priceDisplay) {
-    priceDisplay.textContent = money(prices[coin.id].usd);
-  }
-}
 renderMarkets();
 loadPrices();
 setInterval(loadPrices, 60000);
+</script>
 </script>
 
 </body>
