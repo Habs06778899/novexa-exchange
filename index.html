@@ -357,6 +357,78 @@ input{
   font-size: 11px;
   font-weight: bold;
 }
+  .chart-card {
+  background: #111d31;
+  border: 1px solid #263b5b;
+  border-radius: 17px;
+  padding: 16px;
+  margin: 20px 0;
+}
+
+.chart-heading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chart-heading h3 {
+  color: white;
+  margin: 7px 0;
+}
+
+.chart-timeframes {
+  display: flex;
+  gap: 10px;
+  margin: 18px 0;
+}
+
+.chart-timeframes button {
+  background: #1b2b43;
+  color: #91a4c2;
+  border: none;
+  border-radius: 7px;
+  padding: 8px 14px;
+  font-size: 12px;
+}
+
+.chart-timeframes button.active {
+  background: #174b9c;
+  color: white;
+}
+
+.chart-placeholder {
+  height: 210px;
+  background: linear-gradient(180deg, #14243b, #101a2a);
+  border-radius: 10px;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+}
+
+.chart-placeholder span {
+  color: #91a4c2;
+  font-size: 13px;
+  font-weight: bold;
+  z-index: 2;
+}
+
+.chart-placeholder small {
+  color: #647c9e;
+  margin-top: 8px;
+  z-index: 2;
+}
+
+.chart-line {
+  position: absolute;
+  width: 120%;
+  height: 2px;
+  background: #39c991;
+  transform: rotate(-12deg);
+  opacity: 0.5;
+}
 </style>
 </head>
 
